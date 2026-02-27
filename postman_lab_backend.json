@@ -1,0 +1,244 @@
+{
+  "info": {
+    "name": "API Lab Backend",
+    "description": "Colección para probar la API del backend de laboratorio (lab_backend).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://127.0.0.1:8000" },
+    { "key": "accessToken", "value": "" },
+    { "key": "refreshToken", "value": "" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{accessToken}}", "type": "string" }
+    ]
+  },
+  "item": [
+    {
+      "name": "Autenticación",
+      "item": [
+        {
+          "name": "Iniciar sesión",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.access) pm.collectionVariables.set('accessToken', json.access);",
+                  "if (json.refresh) pm.collectionVariables.set('refreshToken', json.refresh);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/login/"
+          }
+        },
+        {
+          "name": "Refrescar token",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh\": \"{{refreshToken}}\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/refresh/"
+          }
+        },
+        {
+          "name": "Registrar usuario",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"nuevo_usuario\",\n  \"email\": \"usuario@ejemplo.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/register/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pruebas de laboratorio",
+      "item": [
+        {
+          "name": "Listar pruebas",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/lab-tests/"
+          }
+        },
+        {
+          "name": "Obtener prueba por id",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/lab-tests/1/"
+          }
+        },
+        {
+          "name": "Crear prueba",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"test_name\": \"Hemograma completo\",\n  \"sample_type\": \"Sangre\",\n  \"price\": \"25.00\",\n  \"is_available\": true\n}"
+            },
+            "url": "{{baseUrl}}/api/lab-tests/"
+          }
+        },
+        {
+          "name": "Actualizar prueba (completo)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"test_name\": \"Hemograma completo\",\n  \"sample_type\": \"Sangre\",\n  \"price\": \"28.00\",\n  \"is_available\": true\n}"
+            },
+            "url": "{{baseUrl}}/api/lab-tests/1/"
+          }
+        },
+        {
+          "name": "Actualizar prueba (parcial)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_available\": false\n}"
+            },
+            "url": "{{baseUrl}}/api/lab-tests/1/"
+          }
+        },
+        {
+          "name": "Eliminar prueba",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/lab-tests/1/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Órdenes de laboratorio",
+      "item": [
+        {
+          "name": "Listar órdenes",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/lab-orders/"
+          }
+        },
+        {
+          "name": "Listar órdenes (filtrar por estado)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/lab-orders/?status=CREATED",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "lab-orders", ""],
+              "query": [{ "key": "status", "value": "CREATED" }]
+            }
+          }
+        },
+        {
+          "name": "Obtener orden por id",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/lab-orders/1/"
+          }
+        },
+        {
+          "name": "Crear orden (WEB)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"test\": 1,\n  \"patient_name\": \"Juan Pérez\",\n  \"source\": \"WEB\",\n  \"note\": \"Urgente\"\n}"
+            },
+            "url": "{{baseUrl}}/api/lab-orders/"
+          }
+        },
+        {
+          "name": "Crear orden (MOBILE)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"test\": 1,\n  \"patient_name\": \"María García\",\n  \"source\": \"MOBILE\"\n}"
+            },
+            "url": "{{baseUrl}}/api/lab-orders/"
+          }
+        },
+        {
+          "name": "Actualizar orden (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"PROCESSING\",\n  \"result_summary\": \"Valores dentro de rango\"\n}"
+            },
+            "url": "{{baseUrl}}/api/lab-orders/1/"
+          }
+        },
+        {
+          "name": "Eliminar orden",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/lab-orders/1/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mongo (catálogo y eventos)",
+      "item": [
+        {
+          "name": "Obtener catálogo de pruebas",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/test-catalog/"
+          }
+        },
+        {
+          "name": "Obtener eventos de órdenes",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/lab-order-events/"
+          }
+        },
+        {
+          "name": "Obtener eventos por id de orden",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/lab-order-events/?lab_order_id=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "lab-order-events", ""],
+              "query": [{ "key": "lab_order_id", "value": "1" }]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
