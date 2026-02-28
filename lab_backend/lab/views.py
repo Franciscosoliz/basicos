@@ -49,33 +49,39 @@ class LabOrderViewSet(viewsets.ModelViewSet):
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def test_catalog_list(request):
-    from .mongo import test_catalog
-    cursor = test_catalog.find({}).sort("test_name", 1)
-    items = []
-    for doc in cursor:
-        doc["_id"] = str(doc["_id"])
-        if "created_at" in doc and hasattr(doc["created_at"], "isoformat"):
-            doc["created_at"] = doc["created_at"].isoformat()
-        items.append(doc)
-    return Response(items)
+    try:
+        from .mongo import test_catalog
+        cursor = test_catalog.find({}).sort("test_name", 1)
+        items = []
+        for doc in cursor:
+            doc["_id"] = str(doc["_id"])
+            if "created_at" in doc and hasattr(doc["created_at"], "isoformat"):
+                doc["created_at"] = doc["created_at"].isoformat()
+            items.append(doc)
+        return Response(items)
+    except Exception:
+        return Response([])
 
 
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def lab_order_events_list(request):
-    from .mongo import lab_order_events
-    lab_order_id = request.query_params.get("lab_order_id")
-    query = {}
-    if lab_order_id is not None:
-        try:
-            query["lab_order_id"] = int(lab_order_id)
-        except ValueError:
-            pass
-    cursor = lab_order_events.find(query).sort("created_at", -1)
-    items = []
-    for doc in cursor:
-        doc["_id"] = str(doc["_id"])
-        if "created_at" in doc and hasattr(doc["created_at"], "isoformat"):
-            doc["created_at"] = doc["created_at"].isoformat()
-        items.append(doc)
-    return Response(items)
+    try:
+        from .mongo import lab_order_events
+        lab_order_id = request.query_params.get("lab_order_id")
+        query = {}
+        if lab_order_id is not None:
+            try:
+                query["lab_order_id"] = int(lab_order_id)
+            except ValueError:
+                pass
+        cursor = lab_order_events.find(query).sort("created_at", -1)
+        items = []
+        for doc in cursor:
+            doc["_id"] = str(doc["_id"])
+            if "created_at" in doc and hasattr(doc["created_at"], "isoformat"):
+                doc["created_at"] = doc["created_at"].isoformat()
+            items.append(doc)
+        return Response(items)
+    except Exception:
+        return Response([])

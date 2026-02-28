@@ -5,6 +5,7 @@ import LoginScreen from "./src/screens/LoginScreen";
 import HomeScreen from "./src/screens/HomeScreen";
 import PruebasScreen from "./src/screens/PruebasScreen";
 import OrdenesScreen from "./src/screens/OrdenesScreen";
+import CatalogoScreen from "./src/screens/CatalogoScreen";
 import EventosScreen from "./src/screens/EventosScreen";
 
 export type RootStackParamList = {
@@ -12,6 +13,7 @@ export type RootStackParamList = {
   Home: undefined;
   Pruebas: undefined;
   Ordenes: undefined;
+  Catalogo: undefined;
   Eventos: undefined;
 };
 
@@ -25,6 +27,7 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} options={{ title: "Menú" }} />
         <Stack.Screen name="Pruebas" component={PruebasScreen} options={{ title: "Pruebas" }} />
         <Stack.Screen name="Ordenes" component={OrdenesScreen} options={{ title: "Órdenes" }} />
+        <Stack.Screen name="Catalogo" component={CatalogoScreen} options={{ title: "Catálogo" }} />
         <Stack.Screen name="Eventos" component={EventosScreen} options={{ title: "Eventos" }} />
       </Stack.Navigator>
     </NavigationContainer>

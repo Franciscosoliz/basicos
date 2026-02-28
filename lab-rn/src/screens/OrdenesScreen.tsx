@@ -57,6 +57,7 @@ export default function OrdenesScreen() {
       setPatientName("");
     } catch {
       setErrorMessage("No se pudo crear orden.");
+      await loadAll();
     }
   };
 

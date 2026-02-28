@@ -22,11 +22,11 @@ export default function App() {
           </Typography>
 
           <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
-            <Button color="inherit" component={Link} to="/">Home</Button>
+            <Button color="inherit" component={Link} to="/">Inicio</Button>
             <Button color="inherit" component={Link} to="/acerca">Acerca</Button>
             <Button color="inherit" component={Link} to="/ordenes">Órdenes</Button>
-            <Button color="inherit" component={Link} to="/login">Login</Button>
-            <Button color="inherit" component={Link} to="/admin">Admin</Button>
+            <Button color="inherit" component={Link} to="/login">Iniciar sesión</Button>
+            <Button color="inherit" component={Link} to="/admin">Administración</Button>
           </Stack>
         </Toolbar>
       </AppBar>

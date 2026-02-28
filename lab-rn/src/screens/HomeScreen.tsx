@@ -31,8 +31,12 @@ export default function HomeScreen() {
         <Text style={styles.btnText}>Órdenes</Text>
       </Pressable>
 
+      <Pressable onPress={() => navigation.navigate("Catalogo")} style={styles.btn}>
+        <Text style={styles.btnText}>Catálogo (Mongo)</Text>
+      </Pressable>
+
       <Pressable onPress={() => navigation.navigate("Eventos")} style={styles.btn}>
-        <Text style={styles.btnText}>Eventos</Text>
+        <Text style={styles.btnText}>Eventos (Mongo)</Text>
       </Pressable>
 
       <Pressable onPress={logout} style={[styles.btn, styles.btnDanger]}>

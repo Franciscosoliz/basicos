@@ -28,8 +28,11 @@ export default function AdminOrdenesPage() {
       setError("");
       const data = await listLabOrdersAdminApi();
       setItems(data.results);
-    } catch {
-      setError("No se pudo cargar órdenes.");
+    } catch (err: unknown) {
+      const msg = err && typeof err === "object" && "response" in err
+        ? (err as { response?: { data?: { detail?: string } } }).response?.data?.detail
+        : undefined;
+      setError(typeof msg === "string" ? msg : "No se pudo cargar órdenes.");
     }
   };
 
@@ -52,15 +55,29 @@ export default function AdminOrdenesPage() {
       const payload = { test: Number(test), patient_name: patient_name.trim(), status, result_summary: result_summary.trim() || null };
 
       if (editId) await updateLabOrderApi(editId, { patient_name: payload.patient_name, status: payload.status, result_summary: payload.result_summary });
-      else await createLabOrderApi({ test: payload.test, patient_name: payload.patient_name });
+      else await createLabOrderApi({ test: payload.test, patient_name: payload.patient_name, status: "CREATED" });
 
       setEditId(null);
       setPatientName("");
       setResultSummary("");
       setStatus("CREATED");
       await load();
-    } catch {
-      setError("No se pudo guardar orden.");
+    } catch (err: unknown) {
+      const data = err && typeof err === "object" && "response" in err
+        ? (err as { response?: { data?: Record<string, unknown> } }).response?.data
+        : null;
+      let msg: string | null = null;
+      if (data && typeof data === "object") {
+        if ("detail" in data) {
+          const d = data.detail;
+          msg = typeof d === "string" ? d : Array.isArray(d) ? d.join(" ") : null;
+        } else {
+          msg = Object.entries(data)
+            .flatMap(([k, v]) => (Array.isArray(v) ? v : [v]).map((s) => `${k}: ${s}`))
+            .join(". ");
+        }
+      }
+      setError(msg || "No se pudo guardar orden.");
     }
   };
 
@@ -77,8 +94,11 @@ export default function AdminOrdenesPage() {
       setError("");
       await deleteLabOrderApi(id);
       await load();
-    } catch {
-      setError("No se pudo eliminar orden.");
+    } catch (err: unknown) {
+      const msg = err && typeof err === "object" && "response" in err
+        ? (err as { response?: { data?: { detail?: string } } }).response?.data?.detail
+        : undefined;
+      setError(typeof msg === "string" ? msg : "No se pudo eliminar orden.");
     }
   };
 

@@ -171,7 +171,7 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"test\": 1,\n  \"patient_name\": \"Juan Pérez\",\n  \"source\": \"WEB\",\n  \"note\": \"Urgente\"\n}"
+              "raw": "{\n  \"test\": 1,\n  \"patient_name\": \"Juan Pérez\",\n  \"status\": \"CREATED\",\n  \"source\": \"WEB\",\n  \"note\": \"Urgente\"\n}"
             },
             "url": "{{baseUrl}}/api/lab-orders/"
           }
@@ -183,7 +183,7 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"test\": 1,\n  \"patient_name\": \"María García\",\n  \"source\": \"MOBILE\"\n}"
+              "raw": "{\n  \"test\": 1,\n  \"patient_name\": \"María García\",\n  \"status\": \"CREATED\",\n  \"source\": \"MOBILE\"\n}"
             },
             "url": "{{baseUrl}}/api/lab-orders/"
           }

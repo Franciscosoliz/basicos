@@ -10,6 +10,7 @@ class LabTestSerializer(serializers.ModelSerializer):
 
 class LabOrderSerializer(serializers.ModelSerializer):
     test_name = serializers.CharField(source="test.test_name", read_only=True)
+    status = serializers.CharField(required=False, default="CREATED")
 
     class Meta:
         model = LabOrder

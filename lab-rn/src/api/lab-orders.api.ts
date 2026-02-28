@@ -10,10 +10,12 @@ export async function listLabOrdersApi(): Promise<Paginated<LabOrder>> {
 export async function createLabOrderApi(payload: {
   test: number;
   patient_name: string;
+  status?: string;
   source?: string;
   note?: string;
 }): Promise<LabOrder> {
-  const { data } = await http.post<LabOrder>("/api/lab-orders/", payload);
+  const body = { ...payload, status: payload.status ?? "CREATED" };
+  const { data } = await http.post<LabOrder>("/api/lab-orders/", body);
   return data;
 }
 

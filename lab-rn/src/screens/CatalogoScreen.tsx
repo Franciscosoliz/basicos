@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { View, Text, Pressable, FlatList, StyleSheet, ActivityIndicator } from "react-native";
 
-import { listLabOrderEventsApi } from "../api/lab-order-events.api";
-import type { LabOrderEvent } from "../types/labOrderEvent";
+import { listTestCatalogApi } from "../api/test-catalog.api";
+import type { TestCatalogItem } from "../types/testCatalog";
 
-export default function EventosScreen() {
-  const [items, setItems] = useState<LabOrderEvent[]>([]);
+export default function CatalogoScreen() {
+  const [items, setItems] = useState<TestCatalogItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -13,10 +13,10 @@ export default function EventosScreen() {
     try {
       setLoading(true);
       setErrorMessage("");
-      const data = await listLabOrderEventsApi();
+      const data = await listTestCatalogApi();
       setItems(Array.isArray(data) ? data : []);
     } catch {
-      setErrorMessage("No se pudo cargar eventos. Revisa la conexión con la API.");
+      setErrorMessage("No se pudo cargar el catálogo. Revisa la conexión con la API.");
       setItems([]);
     } finally {
       setLoading(false);
@@ -27,7 +27,7 @@ export default function EventosScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Eventos de Órdenes (Mongo)</Text>
+      <Text style={styles.title}>Catálogo de pruebas (Mongo)</Text>
       {loading && <ActivityIndicator size="large" color="#58a6ff" style={styles.loader} />}
       {!loading && !!errorMessage && (
         <>
@@ -43,7 +43,7 @@ export default function EventosScreen() {
             <Text style={styles.btnText}>Refrescar</Text>
           </Pressable>
           {items.length === 0 ? (
-            <Text style={styles.empty}>No hay eventos. Crea órdenes para generar eventos.</Text>
+            <Text style={styles.empty}>No hay registros en el catálogo.</Text>
           ) : (
             <FlatList
               data={items}
@@ -51,9 +51,10 @@ export default function EventosScreen() {
               renderItem={({ item }) => (
                 <View style={styles.row}>
                   <View style={{ flex: 1 }}>
-                    <Text style={styles.rowText}>Orden #{item.lab_order_id} · {item.event_type}</Text>
-                    <Text style={styles.rowSub}>Origen: {item.source}{item.note ? ` · ${item.note}` : ""}</Text>
-                    <Text style={styles.rowSub}>{item.created_at}</Text>
+                    <Text style={styles.rowText}>{item.test_name ?? "—"}</Text>
+                    <Text style={styles.rowSub}>Categoría: {item.category ?? "—"}</Text>
+                    <Text style={styles.rowSub}>Rango normal: {item.normal_range ?? "—"}</Text>
+                    <Text style={styles.rowSub}>Método: {item.method ?? "—"}</Text>
                   </View>
                 </View>
               )}
